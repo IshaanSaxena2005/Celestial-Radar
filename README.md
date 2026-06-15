@@ -1,126 +1,158 @@
-# Echoes of the Cosmos 🌌
+# Celestial Radar 🌍🛰️✨
 
-![Echoes of the Cosmos](Screenshots/Homepage.jpg)
+![Celestial Radar](Screenshots/Homepage.jpg)
 
-Echoes of the Cosmos is an interactive web platform designed to make space exploration engaging and educational.  
-It combines **3D visualization, scientific APIs, voice interaction, and AI assistance** to create an immersive cosmic learning experience.
+**Celestial Radar** is a real-time cosmic radar that allows users to explore the ever-changing sky above any location on Earth. By combining live astronomical data, interactive visualizations, AI assistance, and immersive UI, the platform transforms astronomy into a personalized experience.
 
 ---
 
 ## 🚀 Live Demo
 
-https://ishaansaxena2005.github.io/Echoes-of-the-Cosmos/
+Coming Soon
 
 ---
 
 ## 📸 Screenshots
 
-### Homepage
-![Historical Events](historical_events.png)
+### 🌍 Celestial Dashboard
 
-### 3D Solar System
-![3D Solar System](Screenshots/3D-space-view.jpg)
+![Celestial Dashboard](Screenshots/Homepage.jpg)
 
-### AI Chatbot – Nova
-![AI Chatbot](Screenshots/Chatbot.jpg)
+### 🛰️ Interactive Globe & Zenith View
+
+![Zenith View](Screenshots/Zenith-View.jpg)
+
+### 🤖 Nova AI Assistant
+
+![Nova AI](Screenshots/Nova.jpg)
 
 ---
 
 ## ✨ Features
 
-- 🌌 **Interactive 3D Solar System** with realistic planet visualization
-- 📅 **Historical Space Events** and cosmic facts
-- 📡 **Satellite & Constellation Data**
-- 🌠 **Aurora & Space Media Viewer**
-- ☀ **Sun & Moon Scientific Data**
-- 🎙 **Voice Commands & Speech Synthesis**
-- 🤖 **AI Chatbot – Nova** for answering space questions
-- 🧠 **Cosmic Quiz** to test knowledge
-- 📰 **Space News Ticker**
-- 🎨 **Animated Cosmic UI with modern design**
+* 🌍 **Location-Based Sky Exploration** – Select any location on Earth and discover the celestial objects visible above it.
+* 🛰️ **Live ISS Tracking** – Monitor the International Space Station in real time.
+* 🌌 **Satellite Tracking** – Visualize active satellites using orbital data.
+* 🪐 **Visible Planets Dashboard** – Discover planets currently visible from your location.
+* ⭐ **Constellation Overlay** – Explore constellations calibrated to your local sky.
+* 🌙 **Sun & Moon Analytics** – View Moon phases, illumination, rise/set times, and solar data.
+* 🌠 **Aurora Forecasts** – Check geomagnetic activity and aurora probability.
+* 🤖 **Nova AI Assistant** – Get AI-powered explanations about celestial objects and events.
+* 🎙️ **Voice Commands** – Navigate the platform hands-free using speech recognition.
+* 📸 **Sky Snapshot** – Generate and share a snapshot of your sky at any moment.
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
-- **HTML5**
-- **CSS3**
-- **JavaScript**
-- **Three.js** (3D Solar System)
-- **Web Speech API** (Voice commands & speech synthesis)
-- **Cohere API** (AI chatbot)
-- **NASA APIs**
-- **Launch Library API**
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript (ES6+)
+
+### Visualization
+
+* Three.js
+* Leaflet.js
+* Canvas API
+
+### Astronomy & Data
+
+* OpenNotify API
+* CelesTrak
+* NASA APIs
+* NOAA SWPC
+* SunCalc.js
+* Visible Planets API
+* satellite.js
+
+### AI & Interaction
+
+* Cohere API
+* Web Speech API
+
+### Deployment
+
+* GitHub
+* Render
 
 ---
 
 ## 🧠 Skills Demonstrated
 
-- 3D visualization with Three.js
-- API integration with external data sources
-- Voice interaction using Web Speech API
-- Frontend application architecture
-- Interactive UI/UX design
-- Real-time data visualization
+* Real-time API Integration
+* Geospatial Visualization
+* Satellite Orbit Propagation
+* Interactive UI/UX Design
+* AI-powered Interfaces
+* Voice Interaction Systems
+* Data Visualization
+* Astronomy Data Processing
 
 ---
 
 ## 🛠️ How to Run Locally
 
-### 1. Download the Project
-- Go to the GitHub repository:
-  👉 https://github.com/IshaanSaxena2005/Echoes-of-the-Cosmos
-- Click the green "Code" button → choose "Download ZIP".
-- Extract the ZIP file to a folder on your computer.
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/IshaanSaxena2005/Celestial-Radar.git
+cd Celestial-Radar
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Start a Local Server
+
+If using Vite:
+
+```bash
+npm run dev
+```
+
+Or using Python:
+
+```bash
+python -m http.server 8000
+```
+
+Open:
+
+```text
+http://localhost:8000
+```
 
 ---
 
-### 🖥️ Step 2: Start a Local Server
-> **Opening the project by double-clicking `index.html` will break key features like:**
-> - ❌ 3D planets and their textures won't load
-> - ❌ Videos, backgrounds, or animations may not play
->
-> **To fix this, run a local server using one of the options below:**
+## 👨‍🚀 Team
 
-#### ✅ Option 1: Using Python (Beginner Friendly)
-1. Open the folder where you extracted the ZIP file.
-2. In the address bar of that folder, type `cmd` and press Enter.
-   → This will open the Command Prompt in that folder.
-3. Now type this command and press Enter:
-   ```
-   python -m http.server 8000
-   ```
-4. Open your browser and go to:
-   👉 http://localhost:8000
+### 🛠️ Ishaan Saxena
 
-#### ✅ Option 2: Using VS Code (If installed)
-1. Open Visual Studio Code
-2. Install the Live Server extension
-3. Open the project folder
-4. Right-click `index.html` → choose "Open with Live Server"
+**Core Developer & Technical Lead**
 
-#### ✅ Option 3: Using Node.js (Advanced Users)
-1. Install Node.js from https://nodejs.org
-2. Open the terminal and run:
-   ```
-   npm install -g http-server
-   http-server -p 8000
-   ```
-3. Open browser and visit:
-   👉 http://localhost:8000
+Full-Stack Development • System Architecture • API Integration • AI Feature Integration • Performance Optimization • Deployment & Technical Implementation
+
+### 🎨 Harpreet Singh
+
+**Creative Lead**
+
+Interactive UI Development • UI/UX Ideation • AI Prompt Engineering • Concept Development • User Experience Planning
 
 ---
 
-### 🎉 Step 3: Explore the Universe
-Now your site will work with:
-- ✅ 3D planets and cosmic animations
-- ✅ Full audio/video experience
-- ✅ AI chatbot and interactive tools
+## 🎯 Vision
 
-## 👨‍🚀 Creators
-- 🛠️ **Ishaan Saxena** – Core Developer | Feature Integrator | Logic Builder | UI Specialist
-- 🎨 **Harpreet Singh** – Creative Director | Concept Architect | Prompt Engineer
+Celestial Radar aims to make astronomy accessible to everyone by transforming real scientific data into an engaging, interactive, and personalized cosmic experience.
 
-## 🏆 Submission Note
-This project was built for the AstralWeb SRM Innovate 2025 competition. It aims to blend innovation, education, and user experience in a fun, futuristic way.
+> *"The sky above every location tells a different story. Celestial Radar helps you discover yours."*
 
+---
+
+## 🏆 Competition
+
+Built for **AstralWeb Innovate 2026** at **Aaruush '26**, Celestial Radar bridges the gap between professional astronomy tools and public accessibility through real-time, location-aware exploration.
