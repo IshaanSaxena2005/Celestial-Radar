@@ -116,7 +116,7 @@ function startNovaDemo() {
     'Where should we explore next?',
     'I can fly you to Mars.',
     'Ask me why black holes bend time.',
-    'Space weather is ready for review.'
+    'Zenith Radar is ready for review.'
   ];
   let lineIndex = 0;
 
@@ -375,8 +375,43 @@ function createStars() {
 window.addEventListener('load', createStars);
 
 // Cosmic Control Panel Functions
+function openZenithObservatory() {
+  const container = document.getElementById('zenithObservatoryContainer');
+  const frame = document.getElementById('zenithObservatoryFrame');
+  if (!container) return;
+
+  const panelOverlay = document.getElementById('panelOverlay');
+  if (panelOverlay) panelOverlay.style.display = 'none';
+
+  container.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  document.querySelectorAll('.sidebar-btn').forEach(button => {
+    button.classList.toggle('active', button.dataset.panel === 'zenith-radar');
+  });
+
+  const floatingAlien = document.getElementById('floating-alien');
+  if (floatingAlien) floatingAlien.style.display = 'none';
+
+  if (frame) {
+    frame.src = frame.src;
+  }
+}
+
+function closeZenithObservatory() {
+  const container = document.getElementById('zenithObservatoryContainer');
+  if (!container) return;
+
+  container.classList.remove('active');
+  document.body.style.overflow = 'auto';
+  document.querySelectorAll('.sidebar-btn').forEach(button => button.classList.remove('active'));
+
+  const floatingAlien = document.getElementById('floating-alien');
+  if (floatingAlien) floatingAlien.style.display = '';
+}
+
 function initSidebar() {
-  const sidebarButtons = document.querySelectorAll('.sidebar-btn');
+  const sidebarButtons = document.querySelectorAll('.sidebar-btn[data-panel]');
   
   sidebarButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -384,6 +419,17 @@ function initSidebar() {
       openPanel(panelType);
     });
   });
+
+  const panelFromHash = window.location.hash.replace('#', '');
+  if (panelFromHash) {
+    setTimeout(() => {
+      if (panelFromHash === 'solar-system-3d') {
+        openSolarSystem();
+      } else {
+        openPanel(panelFromHash);
+      }
+    }, 400);
+  }
 }
 
 function openPanel(panelType) {
@@ -396,6 +442,13 @@ function openPanel(panelType) {
     openSolarSystem();
     return;
   }
+
+  if (panelType === 'zenith-radar') {
+    openZenithObservatory();
+    return;
+  }
+
+  closeZenithObservatory();
   
   const overlay = document.getElementById('panelOverlay');
   const content = document.getElementById('panelContent');
@@ -415,10 +468,6 @@ function openPanel(panelType) {
   // Load panel content based on type
   setTimeout(() => {
     switch(panelType) {
-      case 'zenith-radar':
-        content.innerHTML = getZenithRadarPanel();
-        setTimeout(() => initZenithRadarDashboard(), 100);
-        break;
       case 'historical':
         content.innerHTML = getHistoricalEventsPanel();
         // Removed auto-load current date - user will select their own date
@@ -442,11 +491,6 @@ function openPanel(panelType) {
         content.innerHTML = getConstellationsPanel();
         // Initialize constellation canvas
         setTimeout(() => initConstellationCanvas(), 100);
-        break;
-      case 'weather':
-        content.innerHTML = getWeatherPanel();
-        // Auto-load weather data
-        setTimeout(() => loadWeatherData(), 100);
         break;
       case 'aurora':
         content.innerHTML = getAuroraPanel();
@@ -835,14 +879,14 @@ function generateSimulatedSatelliteEvents(date) {
         'Hubble Telescope Pass',
         'Starlink Constellation Pass',
         'GPS Satellite Pass',
-        'Weather Satellite Pass'
+        'Aurora Sensor Pass'
       ],
       descriptions: [
         'Visible pass of International Space Station',
         'Space telescope orbital passage',
         'Satellite constellation visibility',
         'Navigation satellite overhead',
-        'Meteorological satellite pass'
+        'Aurora monitoring satellite pass'
       ]
     },
     {
@@ -1210,143 +1254,6 @@ function highlightConstellation(constellationName) {
   drawConstellation();
 }
 
-function getWeatherPanel() {
-  return `
-    <div class="weather-container">
-      <div class="weather-header">
-        <h3>🌤 Space Weather Dashboard</h3>
-        <button class="weather-btn" onclick="refreshWeatherData()">🔄 Refresh</button>
-      </div>
-      
-      <div class="weather-grid">
-        <div class="weather-card">
-          <h4>Solar Wind Speed</h4>
-          <div class="weather-value" id="solarWind">-- km/s</div>
-          <div class="weather-status" id="solarWindStatus">Loading...</div>
-        </div>
-        <div class="weather-card">
-          <h4>Geomagnetic Activity</h4>
-          <div class="weather-value" id="geomagnetic">--</div>
-          <div class="weather-status" id="geomagneticStatus">Loading...</div>
-        </div>
-        <div class="weather-card">
-          <h4>Kp Index</h4>
-          <div class="weather-value" id="kpIndex">--</div>
-          <div class="weather-status" id="kpStatus">Loading...</div>
-        </div>
-        <div class="weather-card">
-          <h4>Aurora Activity</h4>
-          <div class="weather-value" id="auroraActivity">--</div>
-          <div class="weather-status" id="auroraStatus">Loading...</div>
-        </div>
-      </div>
-      
-      <div class="weather-alerts">
-        <h3>🚨 Space Weather Alerts</h3>
-        <div id="weatherAlerts">Loading alerts...</div>
-      </div>
-      
-      <div class="weather-info">
-        <h3>ℹ️ Space Weather Information</h3>
-        <div class="info-grid">
-          <div class="info-item">
-            <h4>Solar Wind</h4>
-            <p>Stream of charged particles from the Sun that can affect Earth's magnetic field and cause auroras.</p>
-          </div>
-          <div class="info-item">
-            <h4>Geomagnetic Storms</h4>
-            <p>Disturbances in Earth's magnetosphere caused by solar wind and solar storms.</p>
-          </div>
-          <div class="info-item">
-            <h4>Kp Index</h4>
-            <p>Global geomagnetic activity index that indicates the level of geomagnetic disturbance.</p>
-          </div>
-          <div class="info-item">
-            <h4>Aurora Visibility</h4>
-            <p>Likelihood of seeing auroras based on current space weather conditions.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function getWeatherLevel(value, type) {
-  if (type === 'solarWind') {
-    if (value < 450) return { label: 'Low', className: 'low', marker: 'Green' };
-    if (value < 650) return { label: 'Moderate', className: 'moderate', marker: 'Yellow' };
-    return { label: 'High', className: 'high', marker: 'Red' };
-  }
-  if (type === 'kp') {
-    if (value < 4) return { label: 'Low', className: 'low', marker: 'Green' };
-    if (value < 6) return { label: 'Moderate', className: 'moderate', marker: 'Yellow' };
-    return { label: 'High', className: 'high', marker: 'Red' };
-  }
-  if (value < 35) return { label: 'Low', className: 'low', marker: 'Green' };
-  if (value < 65) return { label: 'Moderate', className: 'moderate', marker: 'Yellow' };
-  return { label: 'High', className: 'high', marker: 'Red' };
-}
-
-function renderWeatherStatus(elementId, status) {
-  const element = document.getElementById(elementId);
-  if (!element) return;
-  element.className = `weather-status ${status.className}`;
-  element.innerHTML = `<span class="status-light ${status.className}"></span>${status.marker} / ${status.label}`;
-}
-
-function loadWeatherData() {
-  const solarWind = Math.floor(330 + Math.random() * 430);
-  const kp = Number((1 + Math.random() * 7).toFixed(1));
-  const auroraProbability = Math.min(96, Math.max(12, Math.round(kp * 11 + Math.random() * 18)));
-  const geomagneticScore = Math.round((kp / 9) * 100);
-  const geomagneticLabel = kp < 4 ? 'Quiet' : kp < 6 ? 'Unsettled' : 'Storm Watch';
-
-  const windStatus = getWeatherLevel(solarWind, 'solarWind');
-  const kpStatus = getWeatherLevel(kp, 'kp');
-  const auroraStatus = getWeatherLevel(auroraProbability, 'aurora');
-  const geomagneticStatus = getWeatherLevel(geomagneticScore, 'geomagnetic');
-
-  const solarWindEl = document.getElementById('solarWind');
-  const geomagneticEl = document.getElementById('geomagnetic');
-  const kpEl = document.getElementById('kpIndex');
-  const auroraEl = document.getElementById('auroraActivity');
-  const alertsEl = document.getElementById('weatherAlerts');
-
-  if (solarWindEl) solarWindEl.textContent = `${solarWind} km/s`;
-  if (geomagneticEl) geomagneticEl.textContent = geomagneticLabel;
-  if (kpEl) kpEl.textContent = kp.toFixed(1);
-  if (auroraEl) auroraEl.textContent = `${auroraProbability}%`;
-
-  renderWeatherStatus('solarWindStatus', windStatus);
-  renderWeatherStatus('geomagneticStatus', geomagneticStatus);
-  renderWeatherStatus('kpStatus', kpStatus);
-  renderWeatherStatus('auroraStatus', auroraStatus);
-
-  if (alertsEl) {
-    alertsEl.innerHTML = `
-      <div class="weather-brief">
-        <div><strong>${kpStatus.label} geomagnetic activity</strong><span>Kp ${kp.toFixed(1)} with ${auroraProbability}% aurora probability</span></div>
-        <div class="mini-chart" style="--wind:${Math.min(100, Math.round((solarWind / 800) * 100))}%; --kp:${Math.round((kp / 9) * 100)}%; --aurora:${auroraProbability}%;">
-          <i></i><i></i><i></i>
-        </div>
-      </div>
-      <p>${kp >= 6 ? 'Aurora visibility may expand toward lower latitudes. Check dark-sky conditions after local midnight.' : 'No major storm warning. Conditions remain good for learning how solar wind shapes Earth auroras.'}</p>
-    `;
-  }
-}
-
-function refreshWeatherData() {
-  loadWeatherData();
-  const refreshBtn = document.querySelector('.weather-btn');
-  if (refreshBtn && refreshBtn.textContent.toLowerCase().includes('refresh')) {
-    const original = refreshBtn.textContent;
-    refreshBtn.textContent = 'Updated';
-    setTimeout(() => {
-      refreshBtn.textContent = original;
-    }, 1400);
-  }
-}
-
 function getAuroraPanel() {
   return `
     <div class="aurora-container">
@@ -1365,7 +1272,7 @@ function getAuroraPanel() {
           <li><strong>Altitude:</strong> Auroras occur between 80-640 km above Earth's surface</li>
           <li><strong>Solar Cycle:</strong> Aurora activity increases during solar maximum periods</li>
           <li><strong>Historical Records:</strong> Auroras have been documented for thousands of years across cultures</li>
-          <li><strong>Space Weather:</strong> Geomagnetic storms can make auroras visible much further from the poles</li>
+          <li><strong>Solar Activity:</strong> Geomagnetic storms can make auroras visible much further from the poles</li>
         </ul>
       </div>
       
@@ -3680,7 +3587,7 @@ function initAuroraVideo() {
           <p style="font-size: 12px; margin-top: 10px;">
             You can find free aurora videos on:<br>
             • NASA's website<br>
-            • Space weather sites<br>
+            • Solar activity resources<br>
             • Stock video platforms
           </p>
         </div>
@@ -3798,7 +3705,7 @@ function isSpaceRelated(text) {
 }
 
 async function getAIResponse(userMsg) {
-  const systemPrompt = `You are Nova, an expert AI space copilot inside Echoes of the Cosmos. Give clear, accurate, engaging answers about space. Keep most answers concise and suggest a useful next exploration when appropriate.`;
+  const systemPrompt = `You are Nova, an expert AI space copilot for Project Zenith. Give clear, accurate, engaging answers about space and astronomy. Keep most answers concise and suggest a useful next exploration when appropriate.`;
   const messages = [
     { role: 'system', content: systemPrompt },
     { role: 'user', content: userMsg }
@@ -5677,6 +5584,7 @@ function animate() {
 
 // Open 3D Solar System
 function openSolarSystem() {
+  closeZenithObservatory();
   document.getElementById('solarSystemContainer').classList.add('active');
   document.body.style.overflow = 'hidden';
   
@@ -6802,6 +6710,9 @@ let secondsRemaining = 0;
 let lastISSLat = 0;
 let lastISSLng = 0;
 let lastISSAlt = 420;
+let currentLat = 12.8230;
+let currentLng = 80.0442;
+let currentCity = 'Observatory';
 
 // Global info modal function
 window.showZenithInfoModal = function(name, type) {
@@ -7108,11 +7019,30 @@ function getZenithRadarPanel() {
       <div class="zenith-hero-card">
         <h2>Your Sky Right Now</h2>
         <div class="hero-grid">
-          <div class="hero-item">
+          <div class="hero-item" style="position: relative; overflow: visible;">
             <span class="hero-icon">📍</span>
-            <div class="hero-info">
-              <span class="label">Location</span>
-              <span class="val highlight-cyan" id="hero-location">Ground Station</span>
+            <div class="hero-info" style="width: 100%;">
+              <span class="label">Location Target</span>
+              <div class="location-selector-wrapper">
+                <select id="zenith-location-select" class="zenith-select" onchange="window.changeZenithLocation(this.value)">
+                  <option value="auto">📍 Auto (GPS/IP)</option>
+                  <option value="bangalore">Bangalore, India</option>
+                  <option value="tokyo">Tokyo, Japan</option>
+                  <option value="london">London, UK</option>
+                  <option value="newyork">New York, USA</option>
+                  <option value="sydney">Sydney, Australia</option>
+                  <option value="cairo">Cairo, Egypt</option>
+                  <option value="maunakea">Mauna Kea Observatory</option>
+                  <option value="paranal">Paranal Observatory</option>
+                  <option value="custom">⚙️ Custom Coords...</option>
+                </select>
+              </div>
+              <div class="custom-coords-form" id="custom-coords-form" style="display: none;">
+                <input type="number" id="custom-lat" class="custom-coords-input" placeholder="Lat" step="any" min="-90" max="90" />
+                <input type="number" id="custom-lng" class="custom-coords-input" placeholder="Lng" step="any" min="-180" max="180" />
+                <button onclick="window.applyCustomZenithLocation()" class="custom-coords-btn">Set</button>
+              </div>
+              <span id="hero-location-text" style="font-size: 9px; color: #727e87; margin-top: 4px; display: block; font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">Auto-detecting...</span>
             </div>
           </div>
           <div class="hero-item">
@@ -7288,9 +7218,9 @@ function initZenithRadarDashboard() {
   const height = container.clientHeight || 400;
 
   // Defaults for ground location coordinates
-  let currentLat = 12.8230;
-  let currentLng = 80.0442;
-  let currentCity = 'Observatory';
+  currentLat = 12.8230;
+  currentLng = 80.0442;
+  currentCity = 'Observatory';
 
   // Initialize Scene, Camera, Renderer
   zenithScene = new THREE.Scene();
@@ -7657,8 +7587,12 @@ function initZenithRadarDashboard() {
   }
 
   function updateLocationUI() {
-    const cityEl = document.getElementById('hero-location');
-    if (cityEl) cityEl.textContent = currentCity;
+    const textEl = document.getElementById('hero-location-text');
+    if (textEl) {
+      const latStr = `${Math.abs(currentLat).toFixed(2)}°${currentLat >= 0 ? 'N' : 'S'}`;
+      const lngStr = `${Math.abs(currentLng).toFixed(2)}°${currentLng >= 0 ? 'E' : 'W'}`;
+      textEl.textContent = `${currentCity} (${latStr}, ${lngStr})`;
+    }
   }
 
   // Ground station cone marker on Earth
@@ -8104,8 +8038,62 @@ function initZenithRadarDashboard() {
   };
   
   window.addEventListener('resize', handleResize);
+
+  // Window-level location change handlers
+  window.changeZenithLocation = function(val) {
+    const customForm = document.getElementById('custom-coords-form');
+    if (val === 'custom') {
+      if (customForm) customForm.style.display = 'flex';
+    } else {
+      if (customForm) customForm.style.display = 'none';
+      if (val === 'auto') {
+        initLocationAndCalculations();
+      } else {
+        const presets = {
+          bangalore: { lat: 12.9716, lng: 77.5946, name: 'Bangalore Observatory' },
+          tokyo: { lat: 35.6762, lng: 139.6503, name: 'Tokyo Observatory' },
+          london: { lat: 51.5074, lng: -0.1278, name: 'Greenwich Observatory' },
+          newyork: { lat: 40.7128, lng: -74.0060, name: 'New York Observatory' },
+          sydney: { lat: -33.8688, lng: 151.2093, name: 'Sydney Observatory' },
+          cairo: { lat: 30.0444, lng: 31.2357, name: 'Cairo Observatory' },
+          maunakea: { lat: 19.8206, lng: -155.4681, name: 'Mauna Kea Observatory' },
+          paranal: { lat: -24.6275, lng: -70.4042, name: 'Paranal Observatory' }
+        };
+        const loc = presets[val];
+        if (loc) {
+          currentLat = loc.lat;
+          currentLng = loc.lng;
+          currentCity = loc.name;
+          updateLocationUI();
+          createGroundStationMarker();
+          runAstronomicalCalculations(currentLat, currentLng);
+        }
+      }
+    }
+  };
+
+  window.applyCustomZenithLocation = function() {
+    const latInput = document.getElementById('custom-lat');
+    const lngInput = document.getElementById('custom-lng');
+    if (!latInput || !lngInput) return;
+    
+    const latVal = parseFloat(latInput.value);
+    const lngVal = parseFloat(lngInput.value);
+    
+    if (isNaN(latVal) || isNaN(lngVal) || latVal < -90 || latVal > 90 || lngVal < -180 || lngVal > 180) {
+      alert("Please enter a valid Latitude (-90 to 90) and Longitude (-180 to 180)");
+      return;
+    }
+    
+    currentLat = latVal;
+    currentLng = lngVal;
+    currentCity = 'Custom Base';
+    updateLocationUI();
+    createGroundStationMarker();
+    runAstronomicalCalculations(currentLat, currentLng);
+  };
   
-  // Clean up animation frame, intervals, and event listener when the panel is closed
+  // Clean up animation frame, intervals, and event listener when the panel is closed or content destroyed
   const cleanupObserver = new MutationObserver(() => {
     if (!document.getElementById('zenithGlobeCanvas')) {
       cancelAnimationFrame(zenithAnimationFrame);
@@ -8113,6 +8101,8 @@ function initZenithRadarDashboard() {
       clearInterval(issCountdownInterval);
       window.removeEventListener('resize', handleResize);
       canvas.removeEventListener('pointermove', onPointerMove);
+      delete window.changeZenithLocation;
+      delete window.applyCustomZenithLocation;
       cleanupObserver.disconnect();
     }
   });

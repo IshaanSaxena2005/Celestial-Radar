@@ -5,7 +5,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = "REMOVED"; // <-- Your real key here
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+if (!OPENAI_API_KEY) {
+  console.error('OPENAI_API_KEY environment variable is not set.');
+}
 
 app.post('/api/chat', async (req, res) => {
   const { messages } = req.body;
